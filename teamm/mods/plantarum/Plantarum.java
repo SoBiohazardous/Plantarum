@@ -1,5 +1,6 @@
 package teamm.mods.plantarum;
 
+import net.minecraft.creativetab.CreativeTabs;
 import teamm.mods.plantarum.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -15,6 +16,8 @@ public class Plantarum
 {
 	@SidedProxy(clientSide="teamm.mods.plantarum.proxy.ClientProxy", serverSide="teamm.mods.plantarum.proxy.CommonProxy")
 	public static CommonProxy proxy;
+	
+	public static CreativeTabs creativeTab = new CreativeTabPlantarum("Plantarum");
 	
 	@Mod.EventHandler
 	public void preLoad(FMLPreInitializationEvent e)
