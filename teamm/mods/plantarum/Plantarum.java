@@ -24,6 +24,7 @@ public class Plantarum
 	{
 		PConfig.initConfig(e);
 		PBlocks.loadBlocks();
+		PItems.loadItems();
 		PRecipes.loadRecipes();
 	}
 	

@@ -38,10 +38,8 @@ public class PItemSeed extends PItem implements IPlantable
     public static int hanging;
     public static int germinating;
     public static int restorative;
-    
-    public static int stages;
 
-    public PItemSeed(int id, int blockType, int soilBlock, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative, int stages)
+    public PItemSeed(int id, int blockType, int soilBlock, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
         super(id);
         this.blockType = blockType;
@@ -56,7 +54,6 @@ public class PItemSeed extends PItem implements IPlantable
         this.hanging = hanging;
         this.germinating = germinating;
         this.restorative = restorative;
-        this.stages = stages;
     }
 
     /**
