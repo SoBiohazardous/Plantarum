@@ -3,6 +3,7 @@ package teamm.mods.plantarum.item;
 import java.util.List;
 
 import teamm.mods.plantarum.Plantarum;
+import teamm.mods.plantarum.lib.PBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,8 +38,10 @@ public class PItemSeed extends PItem implements IPlantable
     public static int hanging;
     public static int germinating;
     public static int restorative;
+    
+    public static int stages;
 
-    public PItemSeed(int id, int blockType, int soilBlock, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
+    public PItemSeed(int id, int blockType, int soilBlock, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative, int stages)
     {
         super(id);
         this.blockType = blockType;
@@ -53,6 +56,7 @@ public class PItemSeed extends PItem implements IPlantable
         this.hanging = hanging;
         this.germinating = germinating;
         this.restorative = restorative;
+        this.stages = stages;
     }
 
     /**
