@@ -265,7 +265,37 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int quantityDropped(Random par1Random)
     {
-        return 1;
+    	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
+    	if(te.outPut == 0)
+    	{
+    		return 0;
+    	}
+    	
+    	if(te.outPut == 1)
+    	{
+    		return 0;
+    	}
+    	if(te.outPut == 2)
+    	{
+    		double rand = Math.random();
+    		if(rand < 0.5)
+    		{
+    			return 1 + par1Random.nextInt(3);
+    		}
+    		else
+    		{
+    			return 0;
+    		}
+    	}
+    	if(te.outPut == 3)
+    	{
+    		return 1 + par1Random.nextInt(3);
+    	}
+    	if(te.outPut == 4)
+    	{
+    		return 2 + par1Random.nextInt(6);
+    	}
+    	return 1;
     }
 
     @SideOnly(Side.CLIENT)
