@@ -2,12 +2,14 @@ package teamm.mods.plantarum;
 
 import net.minecraft.creativetab.CreativeTabs;
 import teamm.mods.plantarum.proxy.CommonProxy;
+import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
 import teamm.mods.plantarum.lib.*;
 
 @Mod(modid = "Plantarum", name="Plantarum Mod", version="1.0")
@@ -32,6 +34,7 @@ public class Plantarum
 	public void load(FMLInitializationEvent e)
 	{
 		proxy.registerRenderThings();
+		GameRegistry.registerTileEntity(TileEntityCropCorn.class, "tileEntityCropCorn");
 	}
 	
 	@Mod.EventHandler

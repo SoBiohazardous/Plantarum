@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import teamm.mods.plantarum.Plantarum;
-import teamm.mods.plantarum.tileentity.TileEntityCrop;
+import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -21,29 +21,23 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class PBlockCrop extends PBlockFlower implements ITileEntityProvider
+public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 {
     @SideOnly(Side.CLIENT)
     private Icon[] iconArray;
     
     private int stages;
     
-    public int growthSpeed;
-    public int outPut;
-    public int fertility;
-    public int luminous;
-    public int hardiness;
-    public int thorny;
-    public int hanging;
-    public int germinating;
-    public int restorative;
+    private World world;
+    private int x;
+    private int y;
+    private int z;
     
     public String texture;
-    private static int ground;
     
-    public PBlockCrop(int par1, String textureBase, int stages)
+    public PBlockCropCorn(int par1, String textureBase, int stages)
     {
-        super(par1, ground);
+        super(par1, Block.tilledField.blockID);
         this.setTickRandomly(true);
         float f = 0.5F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -55,20 +49,7 @@ public class PBlockCrop extends PBlockFlower implements ITileEntityProvider
     	this.stages = stages - 1;
     }
     
-    public void setAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative, int ground)
-    {
-    	this.stages = stages - 1;
-    	this.growthSpeed = growthSpeed;
-    	this.outPut = output;
-    	this.fertility = fertility;
-    	this.luminous = luminous;
-    	this.hardiness = hardiness;
-    	this.thorny = thorny;
-    	this.hanging = hanging;
-    	this.germinating = germinating;
-    	this.restorative = restorative;
-    	this.ground = ground;
-    }
+
 
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
@@ -76,7 +57,35 @@ public class PBlockCrop extends PBlockFlower implements ITileEntityProvider
      */
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
     {
-        return par1 == Block.tilledField.blockID || par1 == this.ground;
+    	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
+
+        if(te.hardiness == 1)
+        {
+        	return par1 == Block.tilledField.blockID;
+        }
+    	
+        if(te.hardiness == 2)
+        {
+        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID;
+        }
+        
+        if(te.hardiness == 3)
+        {
+        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID;
+        }
+       
+        if(te.hardiness == 4)
+        {
+        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID || par1 == Block.sandStone.blockID || par1 == Block.stone.blockID || par1 == Block.stoneBrick.blockID || par1== Block.cobblestone.blockID || par1 == Block.cobblestoneMossy.blockID || par1 == Block.blockClay.blockID || par1 == Block.hardenedClay.blockID || par1 == Block.oreCoal.blockID || par1== Block.oreDiamond.blockID || par1 == Block.oreEmerald.blockID || par1 == Block.oreGold.blockID || par1 == Block.oreIron.blockID || par1 == Block.oreLapis.blockID || par1 == Block.oreRedstone.blockID || par1 == Block.oreRedstoneGlowing.blockID;
+        }
+        if(te.hardiness == 5)
+        {
+        	if(world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP))
+        	{
+        		return true;
+        	}
+        }
+        return par1 == Block.tilledField.blockID;
     }
 
     /**
@@ -84,6 +93,11 @@ public class PBlockCrop extends PBlockFlower implements ITileEntityProvider
      */
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
+    	this.world = par1World;
+    	this.x = par2;
+    	this.y = par3;
+    	this.z = par4;
+    	
         super.updateTick(par1World, par2, par3, par4, par5Random);
 
         if (par1World.getBlockLightValue(par2, par3 + 1, par4) >= 9)
@@ -307,6 +321,6 @@ public class PBlockCrop extends PBlockFlower implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World world) 
 	{
-		return new TileEntityCrop();
+		return new TileEntityCropCorn();
 	}
 }

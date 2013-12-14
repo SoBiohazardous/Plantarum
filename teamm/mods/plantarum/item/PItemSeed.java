@@ -3,7 +3,9 @@ package teamm.mods.plantarum.item;
 import java.util.List;
 
 import teamm.mods.plantarum.Plantarum;
+import teamm.mods.plantarum.block.PBlockCropCorn;
 import teamm.mods.plantarum.lib.PBlocks;
+import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,9 +26,8 @@ public class PItemSeed extends PItem implements IPlantable
      * The type of block this seed turns into (wheat or pumpkin stems for instance)
      */
     private int blockType;
-
-    /** BlockID of the block the seeds can be planted on. */
-    private int soilBlockID;
+    
+    private Block crop;
     
     //Tags
     public static int growthSpeed;
@@ -39,11 +40,11 @@ public class PItemSeed extends PItem implements IPlantable
     public static int germinating;
     public static int restorative;
 
-    public PItemSeed(int id, int blockType, int soilBlock, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
+    public PItemSeed(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
         super(id);
-        this.blockType = blockType;
-        this.soilBlockID = soilBlock;
+        this.blockType = blockCrop.blockID;
+        this.crop = blockCrop;
         this.setCreativeTab(Plantarum.creativeTab);
         this.growthSpeed = growthSpeed;
         this.output = output;
@@ -71,9 +72,12 @@ public class PItemSeed extends PItem implements IPlantable
             int i1 = par3World.getBlockId(par4, par5, par6);
             Block soil = Block.blocksList[i1];
 
-            if (soil != null && soil.canSustainPlant(par3World, par4, par5, par6, ForgeDirection.UP, this) && par3World.isAirBlock(par4, par5 + 1, par6))
+            if (soil != null && par3World.isAirBlock(par4, par5 + 1, par6))
             {
                 par3World.setBlock(par4, par5 + 1, par6, this.blockType);
+                PBlockCropCorn c = (PBlockCropCorn)crop;
+                TileEntityCropCorn te = (TileEntityCropCorn)par3World.getBlockTileEntity(par4, par5 + 1, par6);
+                te.setAttributes(par3World, par4, par5, par6, growthSpeed, output, fertility, luminous, hardiness, thorny, hanging, germinating, restorative);
                 --par1ItemStack.stackSize;
                 return true;
             }

@@ -1,5 +1,6 @@
 package teamm.mods.plantarum;
 
+import teamm.mods.plantarum.lib.PItems;
 import net.minecraft.creativetab.CreativeTabs;
 
 public class CreativeTabPlantarum extends CreativeTabs
@@ -11,7 +12,7 @@ public class CreativeTabPlantarum extends CreativeTabs
 
     public int getTabIconItemIndex()
     {
-    	return 0;
+    	return PItems.seedCorn.itemID;
     }
     
     public String getTranslatedTabLabel()

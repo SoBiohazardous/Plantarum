@@ -1,15 +1,15 @@
 package teamm.mods.plantarum.lib;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import teamm.mods.plantarum.block.PBlockCrop;
+import teamm.mods.plantarum.block.PBlockCropCorn;
 import net.minecraft.block.Block;
 
 public class PBlocks 
 {
-	public static PBlockCrop cropCorn;
+	public static PBlockCropCorn cropCorn;
 	public static void loadBlocks()
 	{
-		cropCorn = (PBlockCrop)new PBlockCrop(PConfig.cropCornId, "cropCorn", 6).setUnlocalizedName("cropCorn");
+		cropCorn = (PBlockCropCorn)new PBlockCropCorn(PConfig.cropCornId, "cropCorn", 6).setUnlocalizedName("cropCorn");
 		GameRegistry.registerBlock(cropCorn, "cropCorn");
 	}
 	
