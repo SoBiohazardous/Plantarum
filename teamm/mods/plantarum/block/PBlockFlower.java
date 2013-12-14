@@ -27,7 +27,7 @@ public class PBlockFlower extends PBlock implements IPlantable
         this.setCreativeTab(Plantarum.creativeTab);
     }
 
-    protected PBlockFlower(int par1, int ground)
+    protected PBlockFlower(int par1)
     {
         this(par1, Material.plants);
     }

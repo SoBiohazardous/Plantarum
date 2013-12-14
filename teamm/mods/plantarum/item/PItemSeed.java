@@ -64,15 +64,15 @@ public class PItemSeed extends PItem implements IPlantable
      */
     public void setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
-    	item.stackTagCompound.setByte("growthSpeed", (byte)growthSpeed);
-    	item.stackTagCompound.setByte("output", (byte)output);
-    	item.stackTagCompound.setByte("fertility", (byte)fertility);
-    	item.stackTagCompound.setByte("luminous", (byte)luminous);
-    	item.stackTagCompound.setByte("hardiness", (byte)hardiness);
-    	item.stackTagCompound.setByte("thorny", (byte)thorny);
-    	item.stackTagCompound.setByte("hanging", (byte)hanging);
-    	item.stackTagCompound.setByte("germinating", (byte)germinating);
-    	item.stackTagCompound.setByte("restorative", (byte)restorative);
+    	item.stackTagCompound.setInteger("growthSpeed", growthSpeed);
+    	item.stackTagCompound.setInteger("output", output);
+    	item.stackTagCompound.setInteger("fertility", fertility);
+    	item.stackTagCompound.setInteger("luminous", luminous);
+    	item.stackTagCompound.setInteger("hardiness", hardiness);
+    	item.stackTagCompound.setInteger("thorny", thorny);
+    	item.stackTagCompound.setInteger("hanging", hanging);
+    	item.stackTagCompound.setInteger("germinating", germinating);
+    	item.stackTagCompound.setInteger("restorative", restorative);
     }
 
     /**
@@ -95,7 +95,8 @@ public class PItemSeed extends PItem implements IPlantable
                 par3World.setBlock(par4, par5 + 1, par6, this.blockType);
                 PBlockCropCorn c = (PBlockCropCorn)crop;
                 TileEntityCropCorn te = (TileEntityCropCorn)par3World.getBlockTileEntity(par4, par5 + 1, par6);
-                te.setAttributes(par3World, par4, par5, par6, growthSpeed, output, fertility, luminous, hardiness, thorny, hanging, germinating, restorative);
+                NBTTagCompound nbt = par1ItemStack.stackTagCompound;
+                te.setAttributes(par3World, par4, par5, par6, nbt.getInteger("growthSpeed"), nbt.getInteger("output"), nbt.getInteger("fertility"), nbt.getInteger("luminous"), nbt.getInteger("hardiness"), nbt.getInteger("thorny"), nbt.getInteger("hanging"), nbt.getInteger("germinating"), nbt.getInteger("restorative"));
                 --par1ItemStack.stackSize;
                 return true;
             }
@@ -132,16 +133,7 @@ public class PItemSeed extends PItem implements IPlantable
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
     	item = par1ItemStack;
-    	par1ItemStack.stackTagCompound = new NBTTagCompound();
-    	par1ItemStack.stackTagCompound.setByte("growthSpeed", (byte)growthSpeed);
-    	par1ItemStack.stackTagCompound.setByte("output", (byte)output);
-    	par1ItemStack.stackTagCompound.setByte("fertility", (byte)fertility);
-    	par1ItemStack.stackTagCompound.setByte("luminous",(byte)luminous);
-    	par1ItemStack.stackTagCompound.setByte("hardiness",(byte)hardiness);
-    	par1ItemStack.stackTagCompound.setByte("thorny",(byte)thorny);
-    	par1ItemStack.stackTagCompound.setByte("hanging",(byte)hanging);
-    	par1ItemStack.stackTagCompound.setByte("germinating", (byte)germinating);
-    	par1ItemStack.stackTagCompound.setByte("restorative", (byte)restorative);
+    	createNBT(par1ItemStack);
     }
     
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
@@ -152,21 +144,36 @@ public class PItemSeed extends PItem implements IPlantable
     	{
     		if (par1ItemStack.stackTagCompound != null)
     		{
-    			par3List.add(EnumChatFormatting.BLUE + "Growth Speed - " + Byte.toString(nbttag.getByte("growthSpeed")));
-    			par3List.add(EnumChatFormatting.BLUE + "Output - " + Byte.toString(nbttag.getByte("output")));
-    			par3List.add(EnumChatFormatting.BLUE + "Fertility - " + Byte.toString(nbttag.getByte("fertility")));
-    			par3List.add(EnumChatFormatting.BLUE + "Luminous - " + Byte.toString(nbttag.getByte("luminous")));
-    			par3List.add(EnumChatFormatting.BLUE + "Hardiness - " + Byte.toString(nbttag.getByte("hardiness")));
-    			par3List.add(EnumChatFormatting.BLUE + "Thorny - " + Byte.toString(nbttag.getByte("thorny")));
-    			par3List.add(EnumChatFormatting.BLUE + "Hanging - " + Byte.toString(nbttag.getByte("hanging")));
-    			par3List.add(EnumChatFormatting.BLUE + "Germinating - " + Byte.toString(nbttag.getByte("germinating")));
-    			par3List.add(EnumChatFormatting.BLUE + "Restorative - " + Byte.toString(nbttag.getByte("restorative")));
+    			par3List.add(EnumChatFormatting.BLUE + "Growth Speed - " + Integer.toString(nbttag.getInteger("growthSpeed")));
+    			par3List.add(EnumChatFormatting.BLUE + "Output - " + Integer.toString(nbttag.getInteger("output")));
+    			par3List.add(EnumChatFormatting.BLUE + "Fertility - " + Integer.toString(nbttag.getInteger("fertility")));
+    			par3List.add(EnumChatFormatting.BLUE + "Luminous - " + Integer.toString(nbttag.getInteger("luminous")));
+    			par3List.add(EnumChatFormatting.BLUE + "Hardiness - " + Integer.toString(nbttag.getInteger("hardiness")));
+    			par3List.add(EnumChatFormatting.BLUE + "Thorny - " + Integer.toString(nbttag.getInteger("thorny")));
+    			par3List.add(EnumChatFormatting.BLUE + "Hanging - " + Integer.toString(nbttag.getInteger("hanging")));
+    			par3List.add(EnumChatFormatting.BLUE + "Germinating - " + Integer.toString(nbttag.getInteger("germinating")));
+    			par3List.add(EnumChatFormatting.BLUE + "Restorative - " + Integer.toString(nbttag.getInteger("restorative")));
     		}
     	}
     	else
     	{
-    		par3List.add("No NBT Data found.");
+    		createNBT(par1ItemStack);
     	}
+    }
+    
+    public void createNBT(ItemStack par1ItemStack)
+    {
+    	par1ItemStack.stackTagCompound = new NBTTagCompound();
+    	par1ItemStack.stackTagCompound.setInteger("growthSpeed", growthSpeed);
+    	par1ItemStack.stackTagCompound.setInteger("output", output);
+    	par1ItemStack.stackTagCompound.setInteger("fertility", fertility);
+    	par1ItemStack.stackTagCompound.setInteger("luminous",luminous);
+    	par1ItemStack.stackTagCompound.setInteger("hardiness",hardiness);
+    	par1ItemStack.stackTagCompound.setInteger("thorny",thorny);
+    	par1ItemStack.stackTagCompound.setInteger("hanging",hanging);
+    	par1ItemStack.stackTagCompound.setInteger("germinating", germinating);
+    	par1ItemStack.stackTagCompound.setInteger("restorative", restorative);
+
     }
 
 }

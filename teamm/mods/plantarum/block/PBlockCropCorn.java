@@ -1,5 +1,6 @@
 package teamm.mods.plantarum.block;
 
+import static net.minecraftforge.common.ForgeDirection.UP;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,7 +23,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.IPlantable;
 
 public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 {
@@ -39,7 +43,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     
     public PBlockCropCorn(int par1, String textureBase, int stages)
     {
-        super(par1, Block.tilledField.blockID);
+        super(par1);
         this.setTickRandomly(true);
         float f = 0.5F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -95,7 +99,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         }
         return par1 == Block.tilledField.blockID;
     }
-
+    
     /**
      * Ticks the block if it's been scheduled
      */
@@ -225,6 +229,14 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     }
 
     /**
+     * Generate a crop produce ItemStack for this crop.
+     */
+    protected int getCropItem()
+    {
+        return PItems.seedCorn.itemID;
+    }
+
+    /**
      * Drops the block items with a specified chance of dropping the specified items
      */
     public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7)
@@ -259,7 +271,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int idDropped(int par1, Random par2Random, int par3)
     {
-        return par1 == stages ? this.getSeedItem() : null;
+        return par1 == stages ? this.getCropItem() : this.getSeedItem();
     }
 
     /**
