@@ -12,6 +12,7 @@ import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     
     private int stages;
     
-    private World world;
+    World world = Minecraft.getMinecraft().theWorld;
     private int x;
     private int y;
     private int z;
@@ -46,10 +47,18 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         this.setHardness(0.0F);
         this.setStepSound(soundGrassFootstep);
         this.disableStats();
-    	this.texture = texture;
+    	this.texture = textureBase;
     	this.stages = stages - 1;
     }
     
+    @Override
+    public void onBlockAdded(World par1World, int par2, int par3, int par4) 
+    {
+    	this.x = par2;
+    	this.y = par3;
+    	this.z = par4;
+    }
+ 
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
      * blockID passed in. Args: blockID
@@ -92,7 +101,6 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	this.world = par1World;
     	this.x = par2;
     	this.y = par3;
     	this.z = par4;
@@ -239,7 +247,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
         if (metadata >= 7)
         {
-            /*
+            
         	for (int n = 0; n < 3 + fortune; n++)
             {
                 if (world.rand.nextInt(15) <= metadata)
@@ -247,7 +255,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
                     ret.add(new ItemStack(this.getSeedItem(), 1, 0));
                 }
             }
-            */
+            
         	//Fertility - Corn doesn't drop seeds, nor has fertility modifiers.
         }
 
@@ -267,7 +275,9 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int quantityDropped(Random par1Random)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
+    	World w = Minecraft.getMinecraft().theWorld;
+    	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
+    	
     	if(te.outPut == 0)
     	{
     		return 0;
@@ -322,7 +332,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
         for (int i = 0; i < this.iconArray.length; ++i)
         {
-            this.iconArray[i] = par1IconRegister.registerIcon(texture + "_" + i);
+            this.iconArray[i] = par1IconRegister.registerIcon("plantarum:" + texture + i);
         }
     }
     

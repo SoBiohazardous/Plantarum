@@ -46,6 +46,7 @@ public class PItemSeed extends PItem implements IPlantable
         this.blockType = blockCrop.blockID;
         this.crop = blockCrop;
         this.setCreativeTab(Plantarum.creativeTab);
+        this.setMaxStackSize(1);
         this.growthSpeed = growthSpeed;
         this.output = output;
         this.fertility = fertility;
@@ -88,7 +89,7 @@ public class PItemSeed extends PItem implements IPlantable
             int i1 = par3World.getBlockId(par4, par5, par6);
             Block soil = Block.blocksList[i1];
 
-            if (soil != null && par3World.isAirBlock(par4, par5 + 1, par6))
+            if (soil != null && soil.canSustainPlant(par3World, par4, par5, par6, ForgeDirection.UP, this) && par3World.isAirBlock(par4, par5 + 1, par6))
             {
                 par3World.setBlock(par4, par5 + 1, par6, this.blockType);
                 PBlockCropCorn c = (PBlockCropCorn)crop;
@@ -128,7 +129,6 @@ public class PItemSeed extends PItem implements IPlantable
     
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-    	/*
     	par1ItemStack.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed));
     	par1ItemStack.setTagInfo("output", new NBTTagInt((String)null, output));
     	par1ItemStack.setTagInfo("fertility", new NBTTagInt((String)null, fertility));
@@ -138,7 +138,6 @@ public class PItemSeed extends PItem implements IPlantable
     	par1ItemStack.setTagInfo("hanging", new NBTTagInt((String)null, hanging));
     	par1ItemStack.setTagInfo("germinating", new NBTTagInt((String)null, germinating));
     	par1ItemStack.setTagInfo("restorative", new NBTTagInt((String)null, restorative));
-    	*/
     }
     
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 

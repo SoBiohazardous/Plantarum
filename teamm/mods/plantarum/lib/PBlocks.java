@@ -9,7 +9,7 @@ public class PBlocks
 	public static PBlockCropCorn cropCorn;
 	public static void loadBlocks()
 	{
-		cropCorn = (PBlockCropCorn)new PBlockCropCorn(PConfig.cropCornId, "cropCorn", 6).setUnlocalizedName("cropCorn");
+		cropCorn = (PBlockCropCorn)new PBlockCropCorn(PConfig.cropCornId, "Corn", 6).setUnlocalizedName("Corn");
 		GameRegistry.registerBlock(cropCorn, "cropCorn");
 	}
 	
