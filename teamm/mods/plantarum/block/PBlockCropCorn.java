@@ -225,14 +225,6 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     }
 
     /**
-     * Generate a crop produce ItemStack for this crop.
-     */
-    protected int getCropItem()
-    {
-        return Item.wheat.itemID;
-    }
-
-    /**
      * Drops the block items with a specified chance of dropping the specified items
      */
     public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7)
@@ -267,7 +259,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int idDropped(int par1, Random par2Random, int par3)
     {
-        return par1 == stages ? this.getCropItem() : this.getSeedItem();
+        return par1 == stages ? this.getSeedItem() : null;
     }
 
     /**

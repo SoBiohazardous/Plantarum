@@ -8,9 +8,11 @@ import teamm.mods.plantarum.lib.PBlocks;
 import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumChatFormatting;
@@ -22,9 +24,6 @@ import net.minecraftforge.common.IPlantable;
 
 public class PItemSeed extends PItem implements IPlantable
 {
-    /**
-     * The type of block this seed turns into (wheat or pumpkin stems for instance)
-     */
  
     //Tags
     public int growthSpeed;
@@ -39,6 +38,8 @@ public class PItemSeed extends PItem implements IPlantable
     
     private int blockType;
     private Block crop;
+    
+    private ItemStack item;
 
     public PItemSeed(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
@@ -63,17 +64,15 @@ public class PItemSeed extends PItem implements IPlantable
      */
     public void setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
-    	/*
-    	item.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed));
-    	item.setTagInfo("output", new NBTTagInt((String)null, output));
-    	item.setTagInfo("fertility", new NBTTagInt((String)null, fertility));
-    	item.setTagInfo("luminous", new NBTTagInt((String)null, luminous));
-    	item.setTagInfo("hardiness", new NBTTagInt((String)null, hardiness));
-    	item.setTagInfo("thorny", new NBTTagInt((String)null, thorny));
-    	item.setTagInfo("hanging", new NBTTagInt((String)null, hanging));
-    	item.setTagInfo("germinating", new NBTTagInt((String)null, germinating));
-    	item.setTagInfo("restorative", new NBTTagInt((String)null, restorative));
-    	*/
+    	item.stackTagCompound.setByte("growthSpeed", (byte)growthSpeed);
+    	item.stackTagCompound.setByte("output", (byte)output);
+    	item.stackTagCompound.setByte("fertility", (byte)fertility);
+    	item.stackTagCompound.setByte("luminous", (byte)luminous);
+    	item.stackTagCompound.setByte("hardiness", (byte)hardiness);
+    	item.stackTagCompound.setByte("thorny", (byte)thorny);
+    	item.stackTagCompound.setByte("hanging", (byte)hanging);
+    	item.stackTagCompound.setByte("germinating", (byte)germinating);
+    	item.stackTagCompound.setByte("restorative", (byte)restorative);
     }
 
     /**
@@ -81,9 +80,7 @@ public class PItemSeed extends PItem implements IPlantable
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
      */
     public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
-    {	
-    	par1ItemStack.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed++));
-        
+    {	        
     	if (par7 != 1)
         {
             return false;
@@ -130,31 +127,46 @@ public class PItemSeed extends PItem implements IPlantable
     {
         return 0;
     }
-   
+    
+    @Override
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-    	par1ItemStack.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed));
-    	par1ItemStack.setTagInfo("output", new NBTTagInt((String)null, output));
-    	par1ItemStack.setTagInfo("fertility", new NBTTagInt((String)null, fertility));
-    	par1ItemStack.setTagInfo("luminous", new NBTTagInt((String)null, luminous));
-    	par1ItemStack.setTagInfo("hardiness", new NBTTagInt((String)null, hardiness));
-    	par1ItemStack.setTagInfo("thorny", new NBTTagInt((String)null, thorny));
-    	par1ItemStack.setTagInfo("hanging", new NBTTagInt((String)null, hanging));
-    	par1ItemStack.setTagInfo("germinating", new NBTTagInt((String)null, germinating));
-    	par1ItemStack.setTagInfo("restorative", new NBTTagInt((String)null, restorative));
+    	item = par1ItemStack;
+    	par1ItemStack.stackTagCompound = new NBTTagCompound();
+    	par1ItemStack.stackTagCompound.setByte("growthSpeed", (byte)growthSpeed);
+    	par1ItemStack.stackTagCompound.setByte("output", (byte)output);
+    	par1ItemStack.stackTagCompound.setByte("fertility", (byte)fertility);
+    	par1ItemStack.stackTagCompound.setByte("luminous",(byte)luminous);
+    	par1ItemStack.stackTagCompound.setByte("hardiness",(byte)hardiness);
+    	par1ItemStack.stackTagCompound.setByte("thorny",(byte)thorny);
+    	par1ItemStack.stackTagCompound.setByte("hanging",(byte)hanging);
+    	par1ItemStack.stackTagCompound.setByte("germinating", (byte)germinating);
+    	par1ItemStack.stackTagCompound.setByte("restorative", (byte)restorative);
     }
     
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
     {
-    	par3List.add(EnumChatFormatting.BLUE + "Growth Speed - " + growthSpeed);
-    	par3List.add(EnumChatFormatting.BLUE + "Output - " + output);
-    	par3List.add(EnumChatFormatting.BLUE + "Fertility - " + fertility);
-    	par3List.add(EnumChatFormatting.BLUE + "Luminous - " + luminous);
-    	par3List.add(EnumChatFormatting.BLUE + "Hardiness - " + hardiness);
-    	par3List.add(EnumChatFormatting.BLUE + "Thorny - " + thorny);
-    	par3List.add(EnumChatFormatting.BLUE + "Hanging - " + hanging);
-    	par3List.add(EnumChatFormatting.BLUE + "Germinating - " + germinating);
-    	par3List.add(EnumChatFormatting.BLUE + "Restorative - " + restorative);
+    	NBTTagCompound nbttag = par1ItemStack.stackTagCompound;
+    	
+    	if(par1ItemStack.hasTagCompound())
+    	{
+    		if (par1ItemStack.stackTagCompound != null)
+    		{
+    			par3List.add(EnumChatFormatting.BLUE + "Growth Speed - " + Byte.toString(nbttag.getByte("growthSpeed")));
+    			par3List.add(EnumChatFormatting.BLUE + "Output - " + Byte.toString(nbttag.getByte("output")));
+    			par3List.add(EnumChatFormatting.BLUE + "Fertility - " + Byte.toString(nbttag.getByte("fertility")));
+    			par3List.add(EnumChatFormatting.BLUE + "Luminous - " + Byte.toString(nbttag.getByte("luminous")));
+    			par3List.add(EnumChatFormatting.BLUE + "Hardiness - " + Byte.toString(nbttag.getByte("hardiness")));
+    			par3List.add(EnumChatFormatting.BLUE + "Thorny - " + Byte.toString(nbttag.getByte("thorny")));
+    			par3List.add(EnumChatFormatting.BLUE + "Hanging - " + Byte.toString(nbttag.getByte("hanging")));
+    			par3List.add(EnumChatFormatting.BLUE + "Germinating - " + Byte.toString(nbttag.getByte("germinating")));
+    			par3List.add(EnumChatFormatting.BLUE + "Restorative - " + Byte.toString(nbttag.getByte("restorative")));
+    		}
+    	}
+    	else
+    	{
+    		par3List.add("No NBT Data found.");
+    	}
     }
 
 }
