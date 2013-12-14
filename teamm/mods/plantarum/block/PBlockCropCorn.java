@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import teamm.mods.plantarum.Plantarum;
+import teamm.mods.plantarum.lib.PItems;
 import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 
 import net.minecraft.block.Block;
@@ -49,8 +50,6 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	this.stages = stages - 1;
     }
     
-
-
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
      * blockID passed in. Args: blockID
@@ -214,7 +213,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     protected int getSeedItem()
     {
-        return Item.seeds.itemID;
+        return PItems.seedCorn.itemID;
     }
 
     /**
@@ -240,13 +239,16 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
         if (metadata >= 7)
         {
-            for (int n = 0; n < 3 + fortune; n++)
+            /*
+        	for (int n = 0; n < 3 + fortune; n++)
             {
                 if (world.rand.nextInt(15) <= metadata)
                 {
                     ret.add(new ItemStack(this.getSeedItem(), 1, 0));
                 }
             }
+            */
+        	//Fertility - Corn doesn't drop seeds, nor has fertility modifiers.
         }
 
         return ret;

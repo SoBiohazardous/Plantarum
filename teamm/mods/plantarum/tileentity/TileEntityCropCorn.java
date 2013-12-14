@@ -17,12 +17,7 @@ public class TileEntityCropCorn extends TileEntity
     public int hanging;
     public int germinating;
     public int restorative;
-    
-	public void init()
-	{
-		
-	}
-	
+
     /**
      * 
      * Sets the attributes the crop to have. Used for when seeds pass data to crop.
@@ -30,15 +25,19 @@ public class TileEntityCropCorn extends TileEntity
     public void setAttributes(World world, int x, int y, int z, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
     	//TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
-    	growthSpeed = growthSpeed;
-    	outPut = output;
-    	fertility = fertility;
-    	luminous = luminous;
-    	hardiness = hardiness;
-    	thorny = thorny;
-    	hanging = hanging;
-    	germinating = germinating;
-    	restorative = restorative;
+    	this.growthSpeed = growthSpeed;
+    	this.outPut = output;
+    	this.fertility = fertility;
+    	this.luminous = luminous;
+    	this.hardiness = hardiness;
+    	this.thorny = thorny;
+    	this.hanging = hanging;
+    	this.germinating = germinating;
+    	this.restorative = restorative;
+    }
+    
+    public void updateEntity()
+    {
     }
 	
     public void readFromNBT(NBTTagCompound nbt)

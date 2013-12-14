@@ -56,6 +56,22 @@ public class PItemSeed extends PItem implements IPlantable
         this.germinating = germinating;
         this.restorative = restorative;
     }
+    
+    /**
+     * Sets the attribute for seed when a changed crop is destroyed, and needs to drop a seed.
+     */
+    public void setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
+    {
+    	this.growthSpeed = growthSpeed;
+    	this.output = output;
+    	this.fertility = fertility;
+    	this.luminous = luminous;
+    	this.hardiness = hardiness;
+    	this.thorny = thorny;
+    	this.hanging = hanging;
+    	this.germinating = germinating;
+    	this.restorative = restorative;
+    }
 
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
