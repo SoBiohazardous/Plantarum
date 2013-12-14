@@ -13,7 +13,7 @@ public class PConfig
 		Configuration config = new Configuration(e.getSuggestedConfigurationFile());
 		config.load();
 		cropCornId = config.getBlock("Corn Crop", 600).getInt();
-		seedCornId = config.getItem("Corn See", 3000).getInt();
+		seedCornId = config.getItem("Corn Seed", 4000).getInt();
 		config.save();
 	}
 }

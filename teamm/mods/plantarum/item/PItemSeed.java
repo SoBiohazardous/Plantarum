@@ -25,26 +25,24 @@ public class PItemSeed extends PItem implements IPlantable
     /**
      * The type of block this seed turns into (wheat or pumpkin stems for instance)
      */
-    private int blockType;
-    
-    private Block crop;
-    
+ 
     //Tags
-    public static int growthSpeed;
-    public static int output;
-    public static int fertility;
-    public static int luminous;
-    public static int hardiness;
-    public static int thorny;
-    public static int hanging;
-    public static int germinating;
-    public static int restorative;
+    public int growthSpeed;
+    public int output;
+    public int fertility;
+    public int luminous;
+    public int hardiness;
+    public int thorny;
+    public int hanging;
+    public int germinating;
+    public int restorative;
+    
+    private int blockType;
+    private Block crop;
 
     public PItemSeed(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
-        super(id);
-        this.blockType = blockCrop.blockID;
-        this.crop = blockCrop;
+        super(id); 
         this.setCreativeTab(Plantarum.creativeTab);
         this.setMaxStackSize(1);
         this.growthSpeed = growthSpeed;
@@ -56,6 +54,8 @@ public class PItemSeed extends PItem implements IPlantable
         this.hanging = hanging;
         this.germinating = germinating;
         this.restorative = restorative;
+        this.blockType = blockCrop.blockID;  
+        this.crop = blockCrop;
     }
     
     /**
@@ -63,15 +63,17 @@ public class PItemSeed extends PItem implements IPlantable
      */
     public void setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
-    	this.growthSpeed = growthSpeed;
-    	this.output = output;
-    	this.fertility = fertility;
-    	this.luminous = luminous;
-    	this.hardiness = hardiness;
-    	this.thorny = thorny;
-    	this.hanging = hanging;
-    	this.germinating = germinating;
-    	this.restorative = restorative;
+    	/*
+    	item.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed));
+    	item.setTagInfo("output", new NBTTagInt((String)null, output));
+    	item.setTagInfo("fertility", new NBTTagInt((String)null, fertility));
+    	item.setTagInfo("luminous", new NBTTagInt((String)null, luminous));
+    	item.setTagInfo("hardiness", new NBTTagInt((String)null, hardiness));
+    	item.setTagInfo("thorny", new NBTTagInt((String)null, thorny));
+    	item.setTagInfo("hanging", new NBTTagInt((String)null, hanging));
+    	item.setTagInfo("germinating", new NBTTagInt((String)null, germinating));
+    	item.setTagInfo("restorative", new NBTTagInt((String)null, restorative));
+    	*/
     }
 
     /**
@@ -79,8 +81,10 @@ public class PItemSeed extends PItem implements IPlantable
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
      */
     public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
-    {
-        if (par7 != 1)
+    {	
+    	par1ItemStack.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed++));
+        
+    	if (par7 != 1)
         {
             return false;
         }
@@ -126,7 +130,7 @@ public class PItemSeed extends PItem implements IPlantable
     {
         return 0;
     }
-    
+   
     public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
     	par1ItemStack.setTagInfo("growthSpeed", new NBTTagInt((String)null, growthSpeed));
