@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import teamm.mods.plantarum.Plantarum;
+import teamm.mods.plantarum.item.PItemSeed;
 import teamm.mods.plantarum.lib.PItems;
 import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
 
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
@@ -90,6 +92,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         {
         	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID || par1 == Block.sandStone.blockID || par1 == Block.stone.blockID || par1 == Block.stoneBrick.blockID || par1== Block.cobblestone.blockID || par1 == Block.cobblestoneMossy.blockID || par1 == Block.blockClay.blockID || par1 == Block.hardenedClay.blockID || par1 == Block.oreCoal.blockID || par1== Block.oreDiamond.blockID || par1 == Block.oreEmerald.blockID || par1 == Block.oreGold.blockID || par1 == Block.oreIron.blockID || par1 == Block.oreLapis.blockID || par1 == Block.oreRedstone.blockID || par1 == Block.oreRedstoneGlowing.blockID;
         }
+        /*
         if(te.hardiness == 5)
         {
         	if(world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP))
@@ -97,6 +100,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         		return true;
         	}
         }
+        */
         return par1 == Block.tilledField.blockID;
     }
     
@@ -225,7 +229,28 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     protected int getSeedItem()
     {
-        return PItems.seedCorn.itemID;
+    	/*
+    	World w = Minecraft.getMinecraft().theWorld;
+    	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
+    	PItemSeed i = new PItemSeed(PItems.seedCorn.itemID, this, te.growthSpeed, te.outPut, te.fertility, te.luminous, te.hardiness, te.thorny, te.hanging, te.germinating, te.restorative);
+    	return i.itemID;
+    	*/
+    	
+    	ItemStack item = new ItemStack(PItems.seedCorn);
+    	World w = Minecraft.getMinecraft().theWorld;
+    	NBTTagCompound nbt = new NBTTagCompound();
+    	item.stackTagCompound = nbt;
+    	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
+    	item.stackTagCompound.setInteger("growthSpeed", te.growthSpeed);
+    	item.stackTagCompound.setInteger("output", te.outPut);
+    	item.stackTagCompound.setInteger("fertility", te.fertility);
+    	item.stackTagCompound.setInteger("luminous", te.luminous);
+    	item.stackTagCompound.setInteger("hardiness", te.hardiness);
+    	item.stackTagCompound.setInteger("thorny", te.thorny);
+    	item.stackTagCompound.setInteger("hanging", te.hanging);
+    	item.stackTagCompound.setInteger("germinating", te.germinating);
+    	item.stackTagCompound.setInteger("restorative", te.restorative);
+    	return item.itemID;    
     }
 
     /**
@@ -233,7 +258,29 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     protected int getCropItem()
     {
-        return PItems.seedCorn.itemID;
+    	/*
+    	World w = Minecraft.getMinecraft().theWorld;
+    	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
+    	PItemSeed i = new PItemSeed(PItems.seedCorn.itemID, this, te.growthSpeed, te.outPut, te.fertility, te.luminous, te.hardiness, te.thorny, te.hanging, te.germinating, te.restorative);
+    	return i.itemID;
+    	*/
+    	
+    	ItemStack item = new ItemStack(PItems.seedCorn);
+    	World w = Minecraft.getMinecraft().theWorld;
+    	NBTTagCompound nbt = new NBTTagCompound();
+    	item.stackTagCompound = nbt;
+    	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
+    	item.stackTagCompound.setInteger("growthSpeed", te.growthSpeed);
+    	item.stackTagCompound.setInteger("output", te.outPut);
+    	item.stackTagCompound.setInteger("fertility", te.fertility);
+    	item.stackTagCompound.setInteger("luminous", te.luminous);
+    	item.stackTagCompound.setInteger("hardiness", te.hardiness);
+    	item.stackTagCompound.setInteger("thorny", te.thorny);
+    	item.stackTagCompound.setInteger("hanging", te.hanging);
+    	item.stackTagCompound.setInteger("germinating", te.germinating);
+    	item.stackTagCompound.setInteger("restorative", te.restorative);
+    	Item i = item.getItem();
+    	return i.itemID;
     }
 
     /**
@@ -249,7 +296,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     {
         ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortune);
 
-        if (metadata >= 7)
+        if (metadata >= stages)
         {
             
         	for (int n = 0; n < 3 + fortune; n++)

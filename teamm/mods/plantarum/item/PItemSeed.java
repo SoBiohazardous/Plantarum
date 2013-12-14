@@ -16,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -24,7 +26,6 @@ import net.minecraftforge.common.IPlantable;
 
 public class PItemSeed extends PItem implements IPlantable
 {
- 
     //Tags
     public int growthSpeed;
     public int output;
@@ -40,12 +41,15 @@ public class PItemSeed extends PItem implements IPlantable
     private Block crop;
     
     private ItemStack item;
+    
+    private String[] seedNames = new String[]{"unchanged", "changed"};
 
     public PItemSeed(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
         super(id); 
         this.setCreativeTab(Plantarum.creativeTab);
-        this.setMaxStackSize(1);
+        this.setMaxStackSize(64);
+        this.setMaxDamage(0);
         this.growthSpeed = growthSpeed;
         this.output = output;
         this.fertility = fertility;
@@ -58,23 +62,7 @@ public class PItemSeed extends PItem implements IPlantable
         this.blockType = blockCrop.blockID;  
         this.crop = blockCrop;
     }
-    
-    /**
-     * Sets the attribute for seed when a changed crop is destroyed, and needs to drop a seed.
-     */
-    public void setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
-    {
-    	item.stackTagCompound.setInteger("growthSpeed", growthSpeed);
-    	item.stackTagCompound.setInteger("output", output);
-    	item.stackTagCompound.setInteger("fertility", fertility);
-    	item.stackTagCompound.setInteger("luminous", luminous);
-    	item.stackTagCompound.setInteger("hardiness", hardiness);
-    	item.stackTagCompound.setInteger("thorny", thorny);
-    	item.stackTagCompound.setInteger("hanging", hanging);
-    	item.stackTagCompound.setInteger("germinating", germinating);
-    	item.stackTagCompound.setInteger("restorative", restorative);
-    }
-
+ 
     /**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
      * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
@@ -173,7 +161,24 @@ public class PItemSeed extends PItem implements IPlantable
     	par1ItemStack.stackTagCompound.setInteger("hanging",hanging);
     	par1ItemStack.stackTagCompound.setInteger("germinating", germinating);
     	par1ItemStack.stackTagCompound.setInteger("restorative", restorative);
-
+    }
+    
+    /**
+     * Sets the attribute for seed when a changed crop is destroyed, and needs to drop a seed.
+     * Returns its self for calling purposes
+     */
+    public int setSeedAttributes(int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
+    {
+    	item.stackTagCompound.setInteger("growthSpeed", growthSpeed);
+    	item.stackTagCompound.setInteger("output", output);
+    	item.stackTagCompound.setInteger("fertility", fertility);
+    	item.stackTagCompound.setInteger("luminous", luminous);
+    	item.stackTagCompound.setInteger("hardiness", hardiness);
+    	item.stackTagCompound.setInteger("thorny", thorny);
+    	item.stackTagCompound.setInteger("hanging", hanging);
+    	item.stackTagCompound.setInteger("germinating", germinating);
+    	item.stackTagCompound.setInteger("restorative", restorative);
+    	return this.itemID;
     }
 
 }
