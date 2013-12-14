@@ -63,6 +63,8 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	this.x = par2;
     	this.y = par3;
     	this.z = par4;
+    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+    	System.out.println(te.hardiness);
     }
  
     /**
@@ -72,7 +74,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
     {
     	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
-
+    	
         if(te.hardiness == 1)
         {
         	return par1 == Block.tilledField.blockID;
@@ -101,7 +103,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         	}
         }
         */
-        return par1 == Block.tilledField.blockID;
+        return false;
     }
     
     /**

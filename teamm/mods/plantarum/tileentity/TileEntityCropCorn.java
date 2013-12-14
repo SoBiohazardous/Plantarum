@@ -38,6 +38,7 @@ public class TileEntityCropCorn extends TileEntity
     
     public void updateEntity()
     {
+
     }
 	
     public void readFromNBT(NBTTagCompound nbt)
