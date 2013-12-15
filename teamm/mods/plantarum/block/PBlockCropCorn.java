@@ -74,7 +74,10 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);	
     	if(te.luminous == 1)
         {
-        	this.setLightValue(1.0F);
+        	if(!par1World.isRemote)
+        	{
+        		this.setLightValue(1.0F);
+        	}
         }
     	
     	if(te.luminous == 0)
