@@ -57,6 +57,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         this.disableStats();
     	this.texture = textureBase;
     	this.stages = stages - 1;
+
     }
     
     @Override
@@ -65,8 +66,23 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	this.x = par2;
     	this.y = par3;
     	this.z = par4;
+
     }
  
+    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    {
+    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);	
+    	if(te.luminous == 1)
+        {
+        	this.setLightValue(1.0F);
+        }
+    	
+    	if(te.luminous == 0)
+        {
+        	this.setLightValue(0);
+        }
+    }
+    
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
      * blockID passed in. Args: blockID
@@ -117,15 +133,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	
         super.updateTick(par1World, par2, par3, par4, par5Random);
     	
-        TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
-        if(te.luminous == 1)
-        {
-        	this.setLightValue(15);
-        }
-        if(te.luminous == 0)
-        {
-        	this.setLightValue(0);
-        }
+    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
         
         if (par1World.getBlockLightValue(par2, par3 + 1, par4) >= 9)
         {
