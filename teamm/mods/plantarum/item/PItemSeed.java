@@ -83,7 +83,7 @@ public class PItemSeed extends PItem implements IPlantable
                 par3World.setBlock(par4, par5 + 1, par6, this.blockType);
                 PBlockCropCorn c = (PBlockCropCorn)crop;
                 TileEntityCropCorn te = (TileEntityCropCorn)par3World.getBlockTileEntity(par4, par5 + 1, par6);
-                NBTTagCompound nbt = par1ItemStack.stackTagCompound;
+                NBTTagCompound nbt = par1ItemStack.stackTagCompound;               
                 te.setAttributes(par3World, par4, par5, par6, nbt.getInteger("growthSpeed"), nbt.getInteger("output"), nbt.getInteger("fertility"), nbt.getInteger("luminous"), nbt.getInteger("hardiness"), nbt.getInteger("thorny"), nbt.getInteger("hanging"), nbt.getInteger("germinating"), nbt.getInteger("restorative"));
                 --par1ItemStack.stackSize;
                 return true;

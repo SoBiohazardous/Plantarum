@@ -18,10 +18,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -114,7 +116,17 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	this.z = par4;
     	
         super.updateTick(par1World, par2, par3, par4, par5Random);
-
+    	
+        TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+        if(te.luminous == 1)
+        {
+        	this.setLightValue(15);
+        }
+        if(te.luminous == 0)
+        {
+        	this.setLightValue(0);
+        }
+        
         if (par1World.getBlockLightValue(par2, par3 + 1, par4) >= 9)
         {
             int l = par1World.getBlockMetadata(par2, par3, par4);
@@ -123,10 +135,32 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
             {
                 float f = this.getGrowthRate(par1World, par2, par3, par4);
 
-                if (par5Random.nextInt((int)(25.0F / f) + 1) == 0)
+                //growthSpeed
+                if(te.growthSpeed == 0)
                 {
-                    ++l;
-                    par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                	if (par5Random.nextInt((int)(20.0F / f) + 1) == 0)
+                    {
+                        ++l;
+                        par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                    }
+                }
+                
+                if(te.growthSpeed == 1)
+                {
+                	if (par5Random.nextInt((int)(25.0F / f) + 1) == 0)
+                	{
+                		++l;
+                    	par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                	}
+                }
+                
+                if(te.growthSpeed == 2)
+                {
+                	if (par5Random.nextInt((int)(30.0F / f) + 1) == 0)
+                	{
+                		++l;
+                		par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                	}
                 }
             }
         }
@@ -326,17 +360,18 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int quantityDropped(Random par1Random)
     {
+    	/*
     	World w = Minecraft.getMinecraft().theWorld;
     	TileEntityCropCorn te = (TileEntityCropCorn)w.getBlockTileEntity(x, y, z);
     	
     	if(te.outPut == 0)
     	{
-    		return 0;
+    		return 1;
     	}
     	
     	if(te.outPut == 1)
     	{
-    		return 0;
+    		return 1;
     	}
     	if(te.outPut == 2)
     	{
@@ -358,6 +393,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	{
     		return 2 + par1Random.nextInt(6);
     	}
+    	*/
     	return 1;
     }
 
@@ -385,6 +421,15 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         {
             this.iconArray[i] = par1IconRegister.registerIcon("plantarum:" + texture + i);
         }
+    }
+    
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    {
+    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+    	if(te.thorny == 1)
+    	{
+    		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);  
+    	}
     }
     
     //BlockContainer Methods

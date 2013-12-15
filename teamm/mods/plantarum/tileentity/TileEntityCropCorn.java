@@ -17,7 +17,7 @@ public class TileEntityCropCorn extends TileEntity
     public int hanging;
     public int germinating;
     public int restorative;
-
+    
     /**
      * 
      * Sets the attributes the crop to have. Used for when seeds pass data to crop.
@@ -38,7 +38,16 @@ public class TileEntityCropCorn extends TileEntity
     
     public void updateEntity()
     {
-
+    	NBTTagCompound nbt = new NBTTagCompound();
+    	nbt.setInteger("growthSpeed", growthSpeed);
+    	nbt.setInteger("output", outPut);
+    	nbt.setInteger("fertility", fertility);
+    	nbt.setInteger("luminous", luminous);
+    	nbt.setInteger("hardiness", hardiness);
+    	nbt.setInteger("thorny", thorny);
+    	nbt.setInteger("hanging", hanging);
+    	nbt.setInteger("germinating", germinating);
+    	nbt.setInteger("restorative", restorative);
     }
 	
     public void readFromNBT(NBTTagCompound nbt)
@@ -53,11 +62,13 @@ public class TileEntityCropCorn extends TileEntity
     	this.hanging = nbt.getInteger("hanging");
     	this.germinating = nbt.getInteger("germinating");
     	this.restorative = nbt.getInteger("restorative");
+    	
     }
     
     public void writeToNBT(NBTTagCompound nbt)
     {
     	super.writeToNBT(nbt);
+    	/*
     	nbt.setInteger("growthSpeed", growthSpeed);
     	nbt.setInteger("output", outPut);
     	nbt.setInteger("fertility", fertility);
@@ -67,5 +78,6 @@ public class TileEntityCropCorn extends TileEntity
     	nbt.setInteger("hanging", hanging);
     	nbt.setInteger("germinating", germinating);
     	nbt.setInteger("restorative", restorative);
+    	*/
     }
 }

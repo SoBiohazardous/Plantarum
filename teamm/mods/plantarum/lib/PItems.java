@@ -10,7 +10,7 @@ public class PItems
 	public static PItemSeed seedCorn;
 	public static void loadItems()
 	{
-		seedCorn = (PItemSeed)new PItemSeed(PConfig.seedCornId, PBlocks.cropCorn, 2, 3, 0, 0, 2, 0, 3, 0, 0).setUnlocalizedName("CornEar");
+		seedCorn = (PItemSeed)new PItemSeed(PConfig.seedCornId, PBlocks.cropCorn, 1, 3, 0, 0, 2, 0, 3, 0, 0).setUnlocalizedName("CornEar");
 		LanguageRegistry.addName(seedCorn, "Corn Ear");
 	}
 }
