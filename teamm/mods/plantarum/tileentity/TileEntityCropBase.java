@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityCropWheat extends TileEntity
+public class TileEntityCropBase extends TileEntity
 {
     public int growthSpeed;
     public int outPut;
@@ -24,6 +24,7 @@ public class TileEntityCropWheat extends TileEntity
      */
     public void setAttributes(World world, int x, int y, int z, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
+    	//TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
     	this.growthSpeed = growthSpeed;
     	this.outPut = output;
     	this.fertility = fertility;

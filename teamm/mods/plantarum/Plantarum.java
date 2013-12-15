@@ -2,8 +2,7 @@ package teamm.mods.plantarum;
 
 import net.minecraft.creativetab.CreativeTabs;
 import teamm.mods.plantarum.proxy.CommonProxy;
-import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
-import teamm.mods.plantarum.tileentity.TileEntityCropWheat;
+import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -37,8 +36,7 @@ public class Plantarum
 		proxy.registerRenderThings();
 		PBlocks.loadVanillaOverwrites();
 		PItems.loadVanillaOverwrites();
-		GameRegistry.registerTileEntity(TileEntityCropCorn.class, "tileEntityCropCorn");
-		GameRegistry.registerTileEntity(TileEntityCropWheat.class, "tileEntityCropWheat");
+		GameRegistry.registerTileEntity(TileEntityCropBase.class, "tileEntityCropBase");
 	}
 	
 	@Mod.EventHandler

@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import teamm.mods.plantarum.Plantarum;
-import teamm.mods.plantarum.item.PItemSeedCorn;
+import teamm.mods.plantarum.item.PItemSeedEdible;
 import teamm.mods.plantarum.lib.PItems;
-import teamm.mods.plantarum.tileentity.TileEntityCropCorn;
-import teamm.mods.plantarum.tileentity.TileEntityCropWheat;
+import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
@@ -77,7 +76,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
  
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);	
+    	TileEntityCropBase te = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);	
     	if(te.luminous == 1)
         {
         	if(!par1World.isRemote)
@@ -98,7 +97,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
+    	TileEntityCropBase te = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
     	
         if(te.hardiness == 1)
         {
@@ -145,7 +144,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         droppedItem = new ItemStack(PItems.seedCorn);
         NBTTagCompound nbt = new NBTTagCompound();
     	droppedItem.stackTagCompound = nbt;
-    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+    	TileEntityCropBase te = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);
     	droppedItem.stackTagCompound.setInteger("growthSpeed", te.growthSpeed);
     	droppedItem.stackTagCompound.setInteger("output", te.outPut);
     	droppedItem.stackTagCompound.setInteger("fertility", te.fertility);
@@ -354,7 +353,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     public int quantityDropped(Random par1Random)
     {
     	World w = Minecraft.getMinecraft().theWorld;
-    	TileEntityCropWheat te = (TileEntityCropWheat)w.getBlockTileEntity(x, y, z);
+    	TileEntityCropBase te = (TileEntityCropBase)w.getBlockTileEntity(x, y, z);
     	
     	if(this.dOutput == 0)
     	{
@@ -417,7 +416,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+    	TileEntityCropBase te = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);
     	if(te.thorny == 1)
     	{
     		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);  
@@ -451,7 +450,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World world) 
 	{
-		return new TileEntityCropCorn();
+		return new TileEntityCropBase();
 	}
 	
 	public void spreadBlockRandomly(World par1World, int par2, int par3, int par4, Random par5Random)

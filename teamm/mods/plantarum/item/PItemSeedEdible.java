@@ -2,22 +2,31 @@ package teamm.mods.plantarum.item;
 
 import java.util.List;
 
-import teamm.mods.plantarum.block.PBlockCropWheat;
-import teamm.mods.plantarum.tileentity.TileEntityCropWheat;
+import teamm.mods.plantarum.Plantarum;
+import teamm.mods.plantarum.block.PBlockCropCorn;
+import teamm.mods.plantarum.lib.PBlocks;
+import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
 
-public class PItemSeedWheat extends Item implements IPlantable
+public class PItemSeedEdible extends ItemFood implements IPlantable
 {
     //Tags
     public int growthSpeed;
@@ -35,11 +44,11 @@ public class PItemSeedWheat extends Item implements IPlantable
     
     private ItemStack item;
     
-    public PItemSeedWheat(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
+    public PItemSeedEdible(int id, Block blockCrop, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative, int food, float sat)
     {
-        super(id); 
-        this.setCreativeTab(CreativeTabs.tabMisc);
+        super(id, food, sat, false); 
         this.setMaxStackSize(64);
+        this.setCreativeTab(Plantarum.creativeTab);
         this.setMaxDamage(0);
         this.growthSpeed = growthSpeed;
         this.output = output;
@@ -72,8 +81,7 @@ public class PItemSeedWheat extends Item implements IPlantable
             if (soil != null && soil.canSustainPlant(par3World, par4, par5, par6, ForgeDirection.UP, this) && par3World.isAirBlock(par4, par5 + 1, par6))
             {
                 par3World.setBlock(par4, par5 + 1, par6, this.blockType);
-                PBlockCropWheat c = (PBlockCropWheat)crop;
-                TileEntityCropWheat te = (TileEntityCropWheat)par3World.getBlockTileEntity(par4, par5 + 1, par6);
+                TileEntityCropBase te = (TileEntityCropBase)par3World.getBlockTileEntity(par4, par5 + 1, par6);
                 NBTTagCompound nbt = par1ItemStack.stackTagCompound;               
                 if(par1ItemStack.hasTagCompound())
             	{
@@ -179,4 +187,9 @@ public class PItemSeedWheat extends Item implements IPlantable
     	return this.itemID;
     }
 
+    public void registerIcons(IconRegister ir)
+	{
+		itemIcon = ir.registerIcon("Plantarum:"+this.getUnlocalizedName().substring(5)); 
+	}
+    
 }
