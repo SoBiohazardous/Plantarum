@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,6 +50,8 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     private int dOutput;
     
 	ItemStack droppedItem;
+	
+    TileEntityCropBase tec;
 
     public PBlockCropCorn(int par1, String textureBase, int stages)
     {
@@ -65,13 +68,19 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
     }
     
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack)
+    {
+    	tec = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
+    	world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
+    }
+    
     @Override
     public void onBlockAdded(World par1World, int par2, int par3, int par4) 
     {
     	this.x = par2;
     	this.y = par3;
     	this.z = par4;
-
+    	par1World.scheduleBlockUpdate(x, y, z, this.blockID, 4);
     }
  
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
@@ -154,7 +163,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	droppedItem.stackTagCompound.setInteger("hanging", te.hanging);
     	droppedItem.stackTagCompound.setInteger("germinating", te.germinating);
     	droppedItem.stackTagCompound.setInteger("restorative", te.restorative);
-         
+    	    	
     	this.dOutput = te.outPut;
     	
     	if(te.germinating == 1)

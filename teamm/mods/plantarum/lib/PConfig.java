@@ -7,6 +7,7 @@ public class PConfig
 {
 	public static int cropCornId;
 	public static int seedCornId;
+	public static int placerCactusId;
 	
 	public static void initConfig(FMLPreInitializationEvent e)
 	{
@@ -14,6 +15,7 @@ public class PConfig
 		config.load();
 		cropCornId = config.getBlock("Corn Crop", 600).getInt();
 		seedCornId = config.getItem("Corn Seed", 4000).getInt();
+		placerCactusId = config.getItem("Cactus Placer", 4001).getInt();
 		config.save();
 	}
 }

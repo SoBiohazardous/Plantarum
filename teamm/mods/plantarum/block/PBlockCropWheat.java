@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,6 +48,8 @@ public class PBlockCropWheat extends PBlockFlower implements ITileEntityProvider
     private int dOutput;
     
     private ItemStack droppedItem;
+    
+    TileEntityCropBase tec;
         
     public PBlockCropWheat(int par1, int stages)
     {
@@ -61,13 +64,19 @@ public class PBlockCropWheat extends PBlockFlower implements ITileEntityProvider
     	this.stages = stages - 1;
     }
     
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack)
+    {
+    	tec = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
+    	world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
+    }
+    
     @Override
     public void onBlockAdded(World par1World, int par2, int par3, int par4) 
     {
     	this.x = par2;
     	this.y = par3;
     	this.z = par4;
-
+    	par1World.scheduleBlockUpdate(x, y, z, this.blockID, 4);
     }
  
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
@@ -92,37 +101,36 @@ public class PBlockCropWheat extends PBlockFlower implements ITileEntityProvider
      * blockID passed in. Args: blockID
      */
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
-    {
-    	TileEntityCropBase te = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
-    	
-        if(te.hardiness == 1)
+    {	
+        if(tec.hardiness == 1)
         {
         	return par1 == Block.tilledField.blockID;
         }
     	
-        if(te.hardiness == 2)
+        if(tec.hardiness == 2)
         {
         	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID;
         }
         
-        if(te.hardiness == 3)
+        if(tec.hardiness == 3)
         {
         	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID;
         }
        
-        if(te.hardiness == 4)
+        if(tec.hardiness == 4)
         {
         	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID || par1 == Block.sandStone.blockID || par1 == Block.stone.blockID || par1 == Block.stoneBrick.blockID || par1== Block.cobblestone.blockID || par1 == Block.cobblestoneMossy.blockID || par1 == Block.blockClay.blockID || par1 == Block.hardenedClay.blockID || par1 == Block.oreCoal.blockID || par1== Block.oreDiamond.blockID || par1 == Block.oreEmerald.blockID || par1 == Block.oreGold.blockID || par1 == Block.oreIron.blockID || par1 == Block.oreLapis.blockID || par1 == Block.oreRedstone.blockID || par1 == Block.oreRedstoneGlowing.blockID;
         }
 
-        if(te.hardiness == 5)
+        if(tec.hardiness == 5)
         {
         	if(world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP))
         	{
         		return true;
         	}
         }
-        
+        System.out.println(tec);
+        System.out.println(tec.hardiness);
         return false;
     }
     
