@@ -32,7 +32,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.IPlantable;
 
-public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
+public class PBlockCropWheat extends PBlockFlower implements ITileEntityProvider
 {
     @SideOnly(Side.CLIENT)
     private Icon[] iconArray;
@@ -44,14 +44,12 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     private int y;
     private int z;
     
-    public String texture;
-    
-  //temp stored output
+	//temp stored output
     private int dOutput;
     
-	ItemStack droppedItem;
-
-    public PBlockCropCorn(int par1, String textureBase, int stages)
+    private ItemStack droppedItem;
+        
+    public PBlockCropWheat(int par1, int stages)
     {
         super(par1);
         this.setTickRandomly(true);
@@ -61,9 +59,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
         this.setHardness(0.0F);
         this.setStepSound(soundGrassFootstep);
         this.disableStats();
-    	this.texture = textureBase;
     	this.stages = stages - 1;
-
     }
     
     @Override
@@ -77,7 +73,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
  
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);	
+    	TileEntityCropWheat te = (TileEntityCropWheat)par1World.getBlockTileEntity(par2, par3, par4);	
     	if(te.luminous == 1)
         {
         	if(!par1World.isRemote)
@@ -98,7 +94,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
+    	TileEntityCropWheat te = (TileEntityCropWheat)world.getBlockTileEntity(x, y, z);
     	
         if(te.hardiness == 1)
         {
@@ -141,8 +137,8 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	this.z = par4;
     	
         super.updateTick(par1World, par2, par3, par4, par5Random);
-        
-        droppedItem = new ItemStack(PItems.seedCorn);
+     
+        droppedItem = new ItemStack(PItems.seedsWheat);
         NBTTagCompound nbt = new NBTTagCompound();
     	droppedItem.stackTagCompound = nbt;
     	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
@@ -155,9 +151,9 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	droppedItem.stackTagCompound.setInteger("hanging", te.hanging);
     	droppedItem.stackTagCompound.setInteger("germinating", te.germinating);
     	droppedItem.stackTagCompound.setInteger("restorative", te.restorative);
-         
+    	    	
     	this.dOutput = te.outPut;
-    	
+
     	if(te.germinating == 1)
     	{
             this.spreadBlockRandomly(par1World, par2, par3, par4, par5Random);
@@ -306,8 +302,8 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      * Generate a crop produce ItemStack for this crop.
      */
     protected int getCropItem()
-    {
-    	return droppedItem.itemID;
+    {   	
+    	return Item.wheat.itemID;
     }
 
     /**
@@ -325,16 +321,29 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
         if (metadata >= stages)
         {
-            
-        	for (int n = 0; n < 3 + fortune; n++)
-            {
-                if (world.rand.nextInt(15) <= metadata)
+            TileEntityCropWheat te = (TileEntityCropWheat)world.getBlockTileEntity(x, y, z);
+        	
+            if(te.fertility == 2)
+        	{
+        		for (int n = 0; n < 3 + fortune; n++)
                 {
-                    ret.add(new ItemStack(this.getSeedItem(), 1, 0));
+                    if (world.rand.nextInt(15) <= metadata)
+                    {
+                        ret.add(new ItemStack(this.getSeedItem(), 1, 0));
+                    }
                 }
-            }
-            
-        	//Fertility - Corn doesn't drop seeds, nor has fertility modifiers.
+        	}
+        	
+        	if(te.fertility == 3)
+        	{
+        		for (int n = 0; n < 6 + fortune; n++)
+                {
+                    if (world.rand.nextInt(15) <= metadata)
+                    {
+                        ret.add(new ItemStack(this.getSeedItem(), 1, 0));
+                    }
+                }
+        	}        
         }
 
         return ret;
@@ -347,7 +356,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     {
         return par1 == stages ? this.getCropItem() : this.getSeedItem();
     }
-
+    
     /**
      * Returns the quantity of items to drop on block destruction.
      */
@@ -411,13 +420,13 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 
         for (int i = 0; i < this.iconArray.length; ++i)
         {
-            this.iconArray[i] = par1IconRegister.registerIcon("plantarum:" + texture + i);
+            this.iconArray[i] = par1IconRegister.registerIcon(this.getTextureName() + "_stage_" + i);
         }
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
     {
-    	TileEntityCropCorn te = (TileEntityCropCorn)par1World.getBlockTileEntity(par2, par3, par4);
+    	TileEntityCropWheat te = (TileEntityCropWheat)par1World.getBlockTileEntity(par2, par3, par4);
     	if(te.thorny == 1)
     	{
     		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);  
@@ -451,7 +460,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
 	@Override
 	public TileEntity createNewTileEntity(World world) 
 	{
-		return new TileEntityCropCorn();
+		return new TileEntityCropWheat();
 	}
 	
 	public void spreadBlockRandomly(World par1World, int par2, int par3, int par4, Random par5Random)
