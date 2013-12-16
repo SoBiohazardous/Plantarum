@@ -4,6 +4,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import teamm.mods.plantarum.block.PBlockCactus;
 import teamm.mods.plantarum.block.PBlockCropCorn;
+import teamm.mods.plantarum.block.PBlockCropCotton;
 import teamm.mods.plantarum.block.PBlockCropPotatoe;
 import teamm.mods.plantarum.block.PBlockCropWheat;
 import teamm.mods.plantarum.block.PBlockCropsCarrot;
@@ -18,11 +19,15 @@ public class PBlocks
 	public static Block potatoe;
 	public static Block cactus;
 	public static Block stemMelon;
+	public static Block cropCotton;
 	
 	public static void loadBlocks()
 	{
-		cropCorn = new PBlockCropCorn(PConfig.cropCornId, "Corn", 6).setUnlocalizedName("Corn");
+		cropCorn = new PBlockCropCorn(PConfig.cropCornId, "Corn", 6).setUnlocalizedName("cropCorn");
 		GameRegistry.registerBlock(cropCorn, "cropCorn");
+		
+		cropCotton = new PBlockCropCotton(PConfig.cropCottonId, "Cotton", 5).setUnlocalizedName("cropCotton");
+		GameRegistry.registerBlock(cropCotton, "cropCotton");
 	}
 	
 	public static void loadVanillaOverwrites()

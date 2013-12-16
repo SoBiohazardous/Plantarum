@@ -2,6 +2,7 @@ package teamm.mods.plantarum.item;
 
 import java.util.List;
 
+import teamm.mods.plantarum.Plantarum;
 import teamm.mods.plantarum.block.PBlockCropWheat;
 import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 import net.minecraft.block.Block;
@@ -40,6 +41,7 @@ public class PItemSeed extends PItem implements IPlantable
         super(id); 
         this.setMaxStackSize(64);
         this.setMaxDamage(0);
+        this.setCreativeTab(Plantarum.creativeTab);
         this.growthSpeed = growthSpeed;
         this.output = output;
         this.fertility = fertility;
