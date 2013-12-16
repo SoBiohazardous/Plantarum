@@ -16,6 +16,7 @@ public class PItems
 	public static Item carrot;
 	public static Item potatoe;
 	public static Item placerCactus;
+	public static Item seedsMelon;
 	
 	public static void loadItems()
 	{
@@ -39,5 +40,9 @@ public class PItems
 		
 		placerCactus = new PItemBlockPlacerNBT(PConfig.placerCactusId, PBlocks.cactus, 1, 1, 1, 0, 1, 1, 1, 0, 0).setUnlocalizedName("placerCactus").setCreativeTab(CreativeTabs.tabDecorations);
 		LanguageRegistry.addName(placerCactus, "Cactus");
+		
+		Item.itemsList[Item.melonSeeds.itemID] = null;
+		seedsMelon = new PItemSeedVanilla(106, PBlocks.stemMelon, 2, 3, 2, 0, 1, 0, 3, 0, 0).setUnlocalizedName("seeds_melon").setTextureName("seeds_melon").setCreativeTab(CreativeTabs.tabMaterials);
+		LanguageRegistry.addName(seedsMelon, "Melon Seeds");
 	}
 }

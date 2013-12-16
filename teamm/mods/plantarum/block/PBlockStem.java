@@ -1,20 +1,18 @@
 package teamm.mods.plantarum.block;
 
-import static net.minecraftforge.common.ForgeDirection.UP;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import teamm.mods.plantarum.Plantarum;
-import teamm.mods.plantarum.item.PItemSeedEdible;
+import teamm.mods.plantarum.handler.PRenderingHandler;
 import teamm.mods.plantarum.lib.PItems;
 import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,129 +25,107 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.IPlantable;
 
-public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
+import net.minecraftforge.common.ForgeDirection;
+
+public class PBlockStem extends BlockFlower implements ITileEntityProvider
 {
+    /** Defines if it is a Melon or a Pumpkin that the stem is producing. */
+    private final Block fruitType;
     @SideOnly(Side.CLIENT)
-    private Icon[] iconArray;
-    
-    private int stages;
+    private Icon theIcon;
     
     World world = Minecraft.getMinecraft().theWorld;
-    private int x;
-    private int y;
-    private int z;
+    int x;
+    int y;
+    int z;
     
-    public String texture;
+    TileEntityCropBase te;   
     
-    //temp stored output
-    private int dOutput;
+	//ItemStack droppedItem;
     
-	ItemStack droppedItem;
-	
-    TileEntityCropBase tec;
-
-    public PBlockCropCorn(int par1, String textureBase, int stages)
+    public PBlockStem(int par1, Block par2Block)
     {
         super(par1);
+        this.fruitType = par2Block;
         this.setTickRandomly(true);
-        float f = 0.5F;
+        float f = 0.125F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-        this.setCreativeTab(null);
-        this.setHardness(0.0F);
-        this.setStepSound(soundGrassFootstep);
-        this.disableStats();
-    	this.texture = textureBase;
-    	this.stages = stages - 1;
-
+        this.setCreativeTab((CreativeTabs)null);
     }
     
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack)
     {
-    	tec = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
+    	this.x = x;
+    	this.y = y;
+    	this.z = z;
+    	te = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
     	world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
     }
     
-    @Override
-    public void onBlockAdded(World par1World, int par2, int par3, int par4) 
+    public void onBlockAdded(World world, int x, int y, int z) 
     {
-    	this.x = par2;
-    	this.y = par3;
-    	this.z = par4;
-    	par1World.scheduleBlockUpdate(x, y, z, this.blockID, 4);
-    }
- 
-    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-    {
-    	TileEntityCropBase te = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);	
-    	if(te.luminous == 1)
-        {
-        	if(!par1World.isRemote)
-        	{
-        		this.setLightValue(1.0F);
-        	}
-        }
-    	
-    	if(te.luminous == 0)
-        {
-        	this.setLightValue(0);
-        }
+    	this.x = x;
+    	this.y = y;
+    	this.z = z;
+    	world.scheduleBlockUpdate(x, y, z, this.blockID, 4);
     }
     
+
     /**
      * Gets passed in the blockID of the block below and supposed to return true if its allowed to grow on the type of
      * blockID passed in. Args: blockID
      */
     protected boolean canThisPlantGrowOnThisBlockID(int par1)
-    {
-    	TileEntityCropBase te = (TileEntityCropBase)world.getBlockTileEntity(x, y, z);
+    {    	
+        if(te != null)
+        {
+        	if(te.hardiness == 1)
+        	{
+        		return par1 == Block.tilledField.blockID;
+        	}
     	
-        if(te.hardiness == 1)
+        	if(te.hardiness == 2)
+        	{
+        		return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID;
+        	}
+        
+        	if(te.hardiness == 3)
+        	{
+        		return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID;
+        	}
+       
+        	if(te.hardiness == 4)
+        	{
+        		return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID || par1 == Block.sandStone.blockID || par1 == Block.stone.blockID || par1 == Block.stoneBrick.blockID || par1== Block.cobblestone.blockID || par1 == Block.cobblestoneMossy.blockID || par1 == Block.blockClay.blockID || par1 == Block.hardenedClay.blockID || par1 == Block.oreCoal.blockID || par1== Block.oreDiamond.blockID || par1 == Block.oreEmerald.blockID || par1 == Block.oreGold.blockID || par1 == Block.oreIron.blockID || par1 == Block.oreLapis.blockID || par1 == Block.oreRedstone.blockID || par1 == Block.oreRedstoneGlowing.blockID;
+        	}
+
+        	if(te.hardiness == 5)
+        	{
+        		if(world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP))
+        		{
+        			return true;
+        		}
+        	}
+        }
+        else
         {
         	return par1 == Block.tilledField.blockID;
-        }
-    	
-        if(te.hardiness == 2)
-        {
-        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID;
-        }
-        
-        if(te.hardiness == 3)
-        {
-        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID;
-        }
-       
-        if(te.hardiness == 4)
-        {
-        	return par1 == Block.tilledField.blockID || par1 == Block.dirt.blockID || par1 == Block.grass.blockID || par1 == Block.mycelium.blockID || par1 == Block.sand.blockID || par1 == Block.gravel.blockID || par1 == Block.sandStone.blockID || par1 == Block.stone.blockID || par1 == Block.stoneBrick.blockID || par1== Block.cobblestone.blockID || par1 == Block.cobblestoneMossy.blockID || par1 == Block.blockClay.blockID || par1 == Block.hardenedClay.blockID || par1 == Block.oreCoal.blockID || par1== Block.oreDiamond.blockID || par1 == Block.oreEmerald.blockID || par1 == Block.oreGold.blockID || par1 == Block.oreIron.blockID || par1 == Block.oreLapis.blockID || par1 == Block.oreRedstone.blockID || par1 == Block.oreRedstoneGlowing.blockID;
-        }
-
-        if(te.hardiness == 5)
-        {
-        	if(world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP))
-        	{
-        		return true;
-        	}
         }
         
         return false;
     }
-    
+
     /**
      * Ticks the block if it's been scheduled
      */
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	this.x = par2;
-    	this.y = par3;
-    	this.z = par4;
-    	
         super.updateTick(par1World, par2, par3, par4, par5Random);
         
+        /*
         droppedItem = new ItemStack(PItems.seedCorn);
         NBTTagCompound nbt = new NBTTagCompound();
     	droppedItem.stackTagCompound = nbt;
@@ -163,74 +139,130 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     	droppedItem.stackTagCompound.setInteger("hanging", te.hanging);
     	droppedItem.stackTagCompound.setInteger("germinating", te.germinating);
     	droppedItem.stackTagCompound.setInteger("restorative", te.restorative);
-    	    	
-    	this.dOutput = te.outPut;
+    	*/
     	
-    	if(te.germinating == 1)
+        TileEntityCropBase tec = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);
+	
+    	if(tec.germinating == 1)
     	{
-            this.spreadBlockRandomly(par1World, par2, par3, par4, par5Random);
+    		this.spreadBlockRandomly(par1World, par2, par3, par4, par5Random);
     	}
     	
         if (par1World.getBlockLightValue(par2, par3 + 1, par4) >= 9)
         {
-            int l = par1World.getBlockMetadata(par2, par3, par4);
-
-            if (l < stages)
+            float f = this.getGrowthModifier(par1World, par2, par3, par4);
+            
+            float speed = 0;
+            if(tec.growthSpeed == 0)
             {
-                float f = this.getGrowthRate(par1World, par2, par3, par4);
+            	speed = 20.0F;
+            }
+            if(tec.growthSpeed == 1)
+            {
+            	speed = 25.0F;
+            }
+            if(tec.growthSpeed == 2)
+            {
+            	speed = 30.0F;
+            }
+            
+            if (par5Random.nextInt((int)(speed / f) + 1) == 0)
+            {
+                int l = par1World.getBlockMetadata(par2, par3, par4);
 
-                //growthSpeed
-                if(te.growthSpeed == 0)
+                if (l < 7)
                 {
-                	if (par5Random.nextInt((int)(20.0F / f) + 1) == 0)
+                    ++l;
+                    par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                }
+                else
+                {
+                    if (par1World.getBlockId(par2 - 1, par3, par4) == this.fruitType.blockID)
                     {
-                        ++l;
-                        par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
+                        return;
                     }
-                }
-                
-                if(te.growthSpeed == 1)
-                {
-                	if (par5Random.nextInt((int)(25.0F / f) + 1) == 0)
-                	{
-                		++l;
-                    	par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
-                	}
-                }
-                
-                if(te.growthSpeed == 2)
-                {
-                	if (par5Random.nextInt((int)(30.0F / f) + 1) == 0)
-                	{
-                		++l;
-                		par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
-                	}
+
+                    if (par1World.getBlockId(par2 + 1, par3, par4) == this.fruitType.blockID)
+                    {
+                        return;
+                    }
+
+                    if (par1World.getBlockId(par2, par3, par4 - 1) == this.fruitType.blockID)
+                    {
+                        return;
+                    }
+
+                    if (par1World.getBlockId(par2, par3, par4 + 1) == this.fruitType.blockID)
+                    {
+                        return;
+                    }
+
+                    int i1 = par5Random.nextInt(4);
+                    int j1 = par2;
+                    int k1 = par4;
+
+                    if (i1 == 0)
+                    {
+                        j1 = par2 - 1;
+                    }
+
+                    if (i1 == 1)
+                    {
+                        ++j1;
+                    }
+
+                    if (i1 == 2)
+                    {
+                        k1 = par4 - 1;
+                    }
+
+                    if (i1 == 3)
+                    {
+                        ++k1;
+                    }
+
+                    int l1 = par1World.getBlockId(j1, par3 - 1, k1);
+
+                    boolean isSoil = (blocksList[l1] != null && blocksList[l1].canSustainPlant(par1World, j1, par3 - 1, k1, ForgeDirection.UP, this));
+                    if (par1World.isAirBlock(j1, par3, k1) && (isSoil || l1 == Block.dirt.blockID || l1 == Block.grass.blockID))
+                    {
+                        par1World.setBlock(j1, par3, k1, this.fruitType.blockID);
+                    }
                 }
             }
         }
     }
-
-    /**
-     * Apply bonemeal to the crops.
-     */
-    public void fertilize(World par1World, int par2, int par3, int par4)
+    
+    public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
+    {
+    	TileEntityCropBase tec = (TileEntityCropBase)par1World.getBlockTileEntity(par2, par3, par4);
+    	if(tec.luminous == 1)
+        {
+        	if(!par1World.isRemote)
+        	{
+        		this.setLightValue(1.0F);
+        	}
+        }
+    	
+    	if(tec.luminous == 0)
+        {
+        	this.setLightValue(0);
+        }
+    }
+    
+    public void fertilizeStem(World par1World, int par2, int par3, int par4)
     {
         int l = par1World.getBlockMetadata(par2, par3, par4) + MathHelper.getRandomIntegerInRange(par1World.rand, 2, 5);
 
-        if (l > stages)
+        if (l > 7)
         {
-            l = stages;
+            l = 7;
         }
 
         par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
     }
 
-    /**
-     * Gets the growth rate for the crop. Setup to encourage rows by halving growth rate if there is diagonals, crops on
-     * different sides that aren't opposing, and by adding growth for every crop next to this one (and for crop below
-     * this one). Args: x, y, z
-     */
-    private float getGrowthRate(World par1World, int par2, int par3, int par4)
+    private float getGrowthModifier(World par1World, int par2, int par3, int par4)
     {
         float f = 1.0F;
         int l = par1World.getBlockId(par2, par3, par4 - 1);
@@ -282,16 +314,44 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     @SideOnly(Side.CLIENT)
 
     /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     * Returns the color this block should be rendered. Used by leaves.
      */
-    public Icon getIcon(int par1, int par2)
+    public int getRenderColor(int par1)
     {
-        if (par2 < 0 || par2 > stages)
-        {
-            par2 = stages;
-        }
+        int j = par1 * 32;
+        int k = 255 - par1 * 8;
+        int l = par1 * 4;
+        return j << 16 | k << 8 | l;
+    }
 
-        return this.iconArray[par2];
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * Returns a integer with hex for 0xrrggbb with this color multiplied against the blocks color. Note only called
+     * when first determining what to render.
+     */
+    public int colorMultiplier(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    {
+        return this.getRenderColor(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
+    }
+
+    /**
+     * Sets the block's bounds for rendering it as an item
+     */
+    public void setBlockBoundsForItemRender()
+    {
+        float f = 0.125F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+    }
+
+    /**
+     * Updates the blocks bounds based on its current state. Args: world, x, y, z
+     */
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    {
+        this.maxY = (double)((float)(par1IBlockAccess.getBlockMetadata(par2, par3, par4) * 2 + 2) / 16.0F);
+        float f = 0.125F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, (float)this.maxY, 0.5F + f);
     }
 
     /**
@@ -299,23 +359,19 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int getRenderType()
     {
-        return 6;
+        return PRenderingHandler.stemRenderingId;
     }
 
-    /**
-     * Generate a seed ItemStack for this crop.
-     */
-    protected int getSeedItem()
-    {
-    	return droppedItem.itemID;    
-    }
+    @SideOnly(Side.CLIENT)
 
     /**
-     * Generate a crop produce ItemStack for this crop.
+     * Returns the current state of the stem. Returns -1 if the stem is not fully grown, or a value between 0 and 3
+     * based on the direction the stem is facing.
      */
-    protected int getCropItem()
+    public int getState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
     {
-    	return droppedItem.itemID;
+        int l = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
+        return l < 7 ? -1 : (par1IBlockAccess.getBlockId(par2 - 1, par3, par4) == this.fruitType.blockID ? 0 : (par1IBlockAccess.getBlockId(par2 + 1, par3, par4) == this.fruitType.blockID ? 1 : (par1IBlockAccess.getBlockId(par2, par3, par4 - 1) == this.fruitType.blockID ? 2 : (par1IBlockAccess.getBlockId(par2, par3, par4 + 1) == this.fruitType.blockID ? 3 : -1))));
     }
 
     /**
@@ -323,26 +379,20 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7)
     {
-        super.dropBlockAsItemWithChance(par1World, par2, par3, par4, par5, par6, 0);
+        super.dropBlockAsItemWithChance(par1World, par2, par3, par4, par5, par6, par7);
     }
 
     @Override 
     public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
     {
-        ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortune);
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-        if (metadata >= stages)
+        for (int i = 0; i < 3; i++)
         {
-            
-        	for (int n = 0; n < 3 + fortune; n++)
+            if (world.rand.nextInt(15) <= metadata)
             {
-                if (world.rand.nextInt(15) <= metadata)
-                {
-                    ret.add(new ItemStack(this.getSeedItem(), 1, 0));
-                }
+                ret.add(new ItemStack(fruitType == pumpkin ? Item.pumpkinSeeds : Item.melonSeeds));
             }
-            
-        	//Fertility - Corn doesn't drop seeds, nor has fertility modifiers.
         }
 
         return ret;
@@ -353,7 +403,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int idDropped(int par1, Random par2Random, int par3)
     {
-        return par1 == stages ? this.getCropItem() : this.getSeedItem();
+        return -1;
     }
 
     /**
@@ -361,40 +411,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int quantityDropped(Random par1Random)
     {
-    	World w = Minecraft.getMinecraft().theWorld;
-    	TileEntityCropBase te = (TileEntityCropBase)w.getBlockTileEntity(x, y, z);
-    	
-    	if(this.dOutput == 0)
-    	{
-    		return 1;
-    	}
-    	
-    	if(this.dOutput == 1)
-    	{
-    		return 1;
-    	}
-    	if(this.dOutput == 2)
-    	{
-    		double rand = Math.random();
-    		if(rand < 0.5)
-    		{
-    			return 1 + par1Random.nextInt(3);
-    		}
-    		else
-    		{
-    			return 0;
-    		}
-    	}
-    	if(this.dOutput == 3)
-    	{
-    		return 1 + par1Random.nextInt(3);
-    	}
-    	if(this.dOutput == 4)
-    	{
-    		return 2 + par1Random.nextInt(6);
-    	}
-   
-    	return 1;
+        return 1;
     }
 
     @SideOnly(Side.CLIENT)
@@ -404,7 +421,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public int idPicked(World par1World, int par2, int par3, int par4)
     {
-        return this.getSeedItem();
+        return this.fruitType == Block.pumpkin ? Item.pumpkinSeeds.itemID : (this.fruitType == Block.melon ? PItems.seedsMelon.itemID : 0);
     }
 
     @SideOnly(Side.CLIENT)
@@ -415,12 +432,14 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
      */
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.iconArray = new Icon[stages + 1];
+        this.blockIcon = par1IconRegister.registerIcon(this.getTextureName() + "_disconnected");
+        this.theIcon = par1IconRegister.registerIcon(this.getTextureName() + "_connected");
+    }
 
-        for (int i = 0; i < this.iconArray.length; ++i)
-        {
-            this.iconArray[i] = par1IconRegister.registerIcon("plantarum:" + texture + i);
-        }
+    @SideOnly(Side.CLIENT)
+    public Icon getStemIcon()
+    {
+        return this.theIcon;
     }
     
     public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
@@ -431,6 +450,7 @@ public class PBlockCropCorn extends PBlockFlower implements ITileEntityProvider
     		par5Entity.attackEntityFrom(DamageSource.cactus, 1.0F);  
     	}
     }
+    
     
     //BlockContainer Methods
     
