@@ -8,6 +8,7 @@ import teamm.mods.plantarum.block.PBlockCropCotton;
 import teamm.mods.plantarum.block.PBlockCropPotatoe;
 import teamm.mods.plantarum.block.PBlockCropWheat;
 import teamm.mods.plantarum.block.PBlockCropsCarrot;
+import teamm.mods.plantarum.block.PBlockMelon;
 import teamm.mods.plantarum.block.PBlockStem;
 import net.minecraft.block.Block;
 
@@ -18,6 +19,7 @@ public class PBlocks
 	public static Block carrots;
 	public static Block potatoe;
 	public static Block cactus;
+	public static Block blockMelon;
 	public static Block stemMelon;
 	public static Block cropCotton;
 	
@@ -49,8 +51,13 @@ public class PBlocks
 		GameRegistry.registerBlock(cactus, "cactus");
 		LanguageRegistry.addName(cactus, "Cactus");
 		
+		Block.blocksList[Block.melon.blockID] = null;
+		blockMelon = new PBlockMelon(103).setHardness(1.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("melon").setTextureName("melon");
+		GameRegistry.registerBlock(blockMelon, "melon");
+		LanguageRegistry.addName(blockMelon, "Melon");
+		
 		Block.blocksList[Block.melonStem.blockID] = null;
-		stemMelon = new PBlockStem(105, Block.melon).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("pumpkinStem").setTextureName("melon_stem");
+		stemMelon = new PBlockStem(105, blockMelon).setHardness(0.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("pumpkinStem").setTextureName("melon_stem");
 		GameRegistry.registerBlock(stemMelon, "pumpkinStem");
 	}
 }

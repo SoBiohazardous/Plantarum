@@ -11,6 +11,7 @@ public class PConfig
 	public static int cottonSeedId;
 	public static int cottonId;
 	public static int cropCottonId;
+	public static int cropReaderId;
 	
 	public static void initConfig(FMLPreInitializationEvent e)
 	{
@@ -22,6 +23,7 @@ public class PConfig
 		cottonSeedId = config.getItem("Cotton Seeds", 4002).getInt();
 		cottonId = config.getItem("Cotton", 4003).getInt();
 		cropCottonId = config.getBlock("Cotton Crop", 601).getInt();
+		cropReaderId = config.getBlock("Crop Reader", 4004).getInt();
 		config.save();
 	}
 }

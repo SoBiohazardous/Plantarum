@@ -1,6 +1,7 @@
 package teamm.mods.plantarum.lib;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import teamm.mods.plantarum.item.ItemCropReader;
 import teamm.mods.plantarum.item.PItem;
 import teamm.mods.plantarum.item.PItemBlockPlacerNBT;
 import teamm.mods.plantarum.item.PItemSeed;
@@ -21,6 +22,7 @@ public class PItems
 	public static Item seedsMelon;
 	public static Item cottonSeed;
 	public static Item cotton;
+	public static Item cropReader;
 	
 	public static void loadItems()
 	{
@@ -32,6 +34,9 @@ public class PItems
 		
 		cotton = new PItem(PConfig.cottonId).setUnlocalizedName("Cotton");
 		LanguageRegistry.addName(cotton, "Cotton");
+		
+		cropReader = new ItemCropReader(PConfig.cropReaderId).setUnlocalizedName("CropReader");
+		LanguageRegistry.addName(cropReader, "Crop Reader");
 	}
 	
 	public static void loadVanillaOverwrites()

@@ -24,7 +24,6 @@ public class TileEntityCropBase extends TileEntity
      */
     public void setAttributes(World world, int x, int y, int z, int growthSpeed, int output, int fertility, int luminous, int hardiness, int thorny, int hanging, int germinating, int restorative)
     {
-    	//TileEntityCropCorn te = (TileEntityCropCorn)world.getBlockTileEntity(x, y, z);
     	this.growthSpeed = growthSpeed;
     	this.outPut = output;
     	this.fertility = fertility;

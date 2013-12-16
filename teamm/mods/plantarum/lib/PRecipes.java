@@ -8,9 +8,9 @@ public class PRecipes
 {
 	public static void loadRecipes()
 	{
-		GameRegistry.addRecipe(new ItemStack(PItems.seedCorn, 1), new Object[]
+		GameRegistry.addRecipe(new ItemStack(Item.silk, 2), new Object[]
 				{
-			" F ", Character.valueOf('F'), Item.stick
+			"#", "#", Character.valueOf('#'), PItems.cotton
 				});
 		
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import teamm.mods.plantarum.handler.PRenderingHandler;
+import teamm.mods.plantarum.lib.PBlocks;
 import teamm.mods.plantarum.lib.PItems;
 import teamm.mods.plantarum.tileentity.TileEntityCropBase;
 
@@ -226,7 +227,14 @@ public class PBlockStem extends BlockFlower implements ITileEntityProvider
                     boolean isSoil = (blocksList[l1] != null && blocksList[l1].canSustainPlant(par1World, j1, par3 - 1, k1, ForgeDirection.UP, this));
                     if (par1World.isAirBlock(j1, par3, k1) && (isSoil || l1 == Block.dirt.blockID || l1 == Block.grass.blockID))
                     {
-                        par1World.setBlock(j1, par3, k1, this.fruitType.blockID);
+                         
+                    	par1World.setBlock(j1, par3, k1, this.fruitType.blockID);
+                    	TileEntityCropBase te = (TileEntityCropBase)par1World.getBlockTileEntity(j1, par3, k1);
+                    	
+                    	if(te !=null)
+                    	{
+                    		te.setAttributes(par1World, j1, par3, k1, tec.growthSpeed, tec.outPut, tec.fertility, tec.luminous, tec.hardiness, tec.thorny, tec.hanging, tec.germinating, tec.restorative);
+                    	}
                     }
                 }
             }
@@ -421,7 +429,7 @@ public class PBlockStem extends BlockFlower implements ITileEntityProvider
      */
     public int idPicked(World par1World, int par2, int par3, int par4)
     {
-        return this.fruitType == Block.pumpkin ? Item.pumpkinSeeds.itemID : (this.fruitType == Block.melon ? PItems.seedsMelon.itemID : 0);
+        return this.fruitType == Block.pumpkin ? Item.pumpkinSeeds.itemID : (this.fruitType == PBlocks.blockMelon ? PItems.seedsMelon.itemID : 0);
     }
 
     @SideOnly(Side.CLIENT)
